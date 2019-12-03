@@ -18,15 +18,22 @@ namespace FanPanelDemo
 
         protected override Size ArrangeOverride(Size finalSize)
         {
+           if (Children.Count <= 1)
+            {
+                return finalSize;
+            }
+
             var angle = 270D;
-            var averageAngle = 90 / Children.Count;
+            var averageAngle = 90 / (Children.Count - 1);
 
             foreach (UIElement element in Children)
             {
                 var radiusX = finalSize.Width - element.DesiredSize.Width;
-                var radiusY = finalSize.Height;
-                var x = radiusX + (radiusX) * Math.Cos(angle * Math.PI / 180);
-                var y = radiusY + (radiusY) * Math.Sin(angle * Math.PI / 180);
+                var radiusY = finalSize.Height - element.DesiredSize.Height;
+
+                var x = radiusX + (radiusX * Math.Cos(angle * Math.PI / 180));
+                var y = radiusY + (radiusY * Math.Sin(angle * Math.PI / 180));
+
                 element.Arrange(new Rect(new Point(x, y), element.DesiredSize));
 
                 angle -= averageAngle;
